@@ -10,7 +10,30 @@ const io = require('socket.io')(http)
 // Serve web app directory
 app.use(express.static('public'))
 
-// INSERT SOCKET.IO CODE HERE
+/** Manage behavior of each client socket connection */
+io.on('connection', (socket) => {
+  console.log(`User Connected - Socket ID ${socket.id}`)
+
+  // Store the room that the socket is connected to
+  let currentRoom = 'DEFAULT'
+
+  /** Process a room join request. */
+  socket.on('JOIN', (roomName) => {
+    socket.join(currentRoom)
+
+    // Notify user of room join success
+    io.to(socket.id).emit('ROOM_JOINED', currentRoom)
+
+    // Notify room that user has joined
+    socket.broadcast.to(currentRoom).emit('NEW_CONNECTION', null)
+  })
+
+  /** Broadcast a received message to the room */
+  socket.on('MESSAGE', (msg) => {
+    console.log(`New Message - ${msg.text}`)
+    socket.broadcast.to(currentRoom).emit('MESSAGE', msg)
+  })
+})
 
 // Start server
 const port = process.env.PORT || 3000
