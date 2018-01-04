@@ -11,7 +11,15 @@
   </head>
   <body>
     <div id="vue-instance">
-      <!-- Add Chat Container Here -->
+      <div class="chat-container full-width" ref="chatContainer">
+        <div class="message-list">
+          <div class="message full-width" v-for="message in messages">
+            <p>
+            > {{ message }}
+            </p>
+          </div>
+        </div>
+      </div>
       <div class="info-container full-width">
         <!-- Add Room UI Here -->
         <div class="notification-list" ref="notificationContainer">
@@ -24,7 +32,9 @@
         <div class="flex-fill"></div>
         <!-- Add Encryption Key UI Here -->
       </div>
-      <!-- Add Bottom Bar Here -->
+      <div class="bottom-bar full-width">
+        > <input class="message-input" type="text" placeholder="Message" v-model="draft" @keyup.enter="sendMessage()">
+      </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.1/vue.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.slim.js"></script>
