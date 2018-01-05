@@ -33,6 +33,16 @@ io.on('connection', (socket) => {
     console.log(`New Message - ${msg}`)
     socket.broadcast.to(currentRoom).emit('MESSAGE', msg)
   })
+
+  /** Broadcast a new publickey to the room */
+  socket.on('PUBLIC_KEY', (key) => {
+    socket.broadcast.to(currentRoom).emit('PUBLIC_KEY', key)
+  })
+
+  /** Broadcast a disconnection notification to the room */
+  socket.on('disconnect', () => {
+    socket.broadcast.to(currentRoom).emit('USER_DISCONNECTED', null)
+  })
 })
 
 // Start server

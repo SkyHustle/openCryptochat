@@ -14,8 +14,17 @@ const vm = new Vue ({
       draft: ''
     }
   },
-  created () {
-    // Initialize socket.io
+  async created () {
+    this.addNotification('Welcome! Generating a new keypair now.')
+
+    // Initialize crypto webworker thread
+    this.cryptWorker = new Worker('crypto-worker.js')
+
+    // Generate keypair and join default room
+    this.originPublicKey = await this.getWebWorkerResponse('generate-keys')
+    this.addNotification('Keypair Generated')
+
+    // Initialize socketio
     this.socket = io()
     this.setupSocketListeners()
   },
