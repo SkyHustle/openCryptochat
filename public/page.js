@@ -62,6 +62,18 @@ const vm = new Vue ({
       this.socket.emit('MESSAGE', message)
     },
 
+    /** Emit the public key to all users in the chatroom */
+    sendPublicKey () {
+      if (this.originPublicKey) {
+        this.socket.emit('PUBLIC_KEY', this.originPublicKey)
+      }
+    },
+
+    /** Get key snippet for display purposes */
+    getKeySnippet (key) {
+      return key.slice(400, 416)
+    },
+
     /** Join the chatroom */
     joinRoom () {
       this.socket.emit('JOIN')
